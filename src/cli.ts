@@ -11,6 +11,7 @@ import {
   getDefinition,
   indexStatus,
 } from "./store/queries.js";
+import { computeTokenSavings, printTokenSavings } from "./metrics/report.js";
 import { existsSync } from "node:fs";
 
 const program = new Command();
@@ -52,16 +53,74 @@ program
 
 program
   .command("status")
-  .description("Show index status")
+  .description("Show index status (+ token savings vs full-file context)")
   .argument("[root]", "Workspace root", process.cwd())
-  .action((root: string) => {
+  .option("--json", "JSON only (no human token savings block)", false)
+  .action((root: string, opts: { json?: boolean }) => {
     const config = resolveConfig(root);
     if (!existsSync(config.dbPath)) {
       console.error(`No index at ${config.dbPath}. Run: ast-context index`);
       process.exit(1);
     }
     const store = new IndexStore(config.dbPath);
-    console.log(JSON.stringify(indexStatus(store.db), null, 2));
+    const status = indexStatus(store.db);
+    const savings = computeTokenSavings(store.db, config.root);
+    if (opts.json) {
+      console.log(
+        JSON.stringify(
+          {
+            ...status,
+            token_savings: savings
+              ? {
+                  file: savings.filePath,
+                  file_lines: savings.fileLines,
+                  naive_full_file_tokens: savings.naiveFullFileTokens,
+                  structured_tool_tokens: savings.structuredToolTokens,
+                  tokens_saved: savings.tokensSaved,
+                  savings_percent: savings.savingsPercent,
+                }
+              : null,
+          },
+          null,
+          2
+        )
+      );
+    } else {
+      console.log(JSON.stringify(status, null, 2));
+      if (savings) {
+        console.log("");
+        printTokenSavings(store.db, config.root, savings.filePath);
+      }
+    }
+    store.close();
+  });
+
+program
+  .command("tokens")
+  .description(
+    "Compare tokens: full source file vs list_file_symbols + get_definition"
+  )
+  .argument("[root]", "Workspace root", process.cwd())
+  .option("-f, --file <path>", "Relative file path (default: largest indexed)")
+  .option("--json", "Emit JSON report", false)
+  .action((root: string, opts: { file?: string; json?: boolean }) => {
+    const config = resolveConfig(root);
+    if (!existsSync(config.dbPath)) {
+      console.error(`No index at ${config.dbPath}. Run: ast-context index`);
+      process.exit(1);
+    }
+    const store = new IndexStore(config.dbPath);
+    const report = computeTokenSavings(store.db, config.root, opts.file);
+    if (!report) {
+      console.error("No file available for token comparison.");
+      store.close();
+      process.exit(1);
+    }
+    if (opts.json) {
+      console.log(JSON.stringify(report, null, 2));
+    } else {
+      printTokenSavings(store.db, config.root, opts.file);
+    }
     store.close();
   });
 

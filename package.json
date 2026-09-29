@@ -13,6 +13,10 @@
     "index": "tsx src/cli.ts index",
     "serve": "tsx src/cli.ts serve",
     "start": "node dist/cli.js",
+    "smoke": "npm run build && node scripts/smoke.mjs",
+    "bench": "tsx scripts/bench.ts",
+    "bench:express": "tsx scripts/bench.ts --name express",
+    "bench:fastapi": "tsx scripts/bench.ts --name fastapi",
     "fetch-grammars": "node scripts/fetch-grammars.mjs",
     "postinstall": "node scripts/copy-grammars.mjs || node scripts/fetch-grammars.mjs"
   },

@@ -1,6 +1,8 @@
 node_modules/
 dist/
 .ast-context/
+.bench-cache/
+.cursor/
 *.db
 *.db-journal
 .DS_Store
