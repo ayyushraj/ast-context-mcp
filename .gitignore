@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.ast-context/
+*.db
+*.db-journal
+.DS_Store
+*.log
+grammars/*.wasm
+fixtures/.ast-context/

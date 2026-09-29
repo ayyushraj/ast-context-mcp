@@ -1,0 +1,46 @@
+{
+  "name": "ast-context",
+  "version": "0.1.0",
+  "description": "Enterprise AST Context Indexer & MCP Server — deterministic symbol, call-graph, type, and git-blame queries via tree-sitter",
+  "type": "module",
+  "bin": {
+    "ast-context": "./bin/ast-context.js"
+  },
+  "main": "./dist/cli.js",
+  "scripts": {
+    "build": "tsc && node scripts/copy-grammars.mjs",
+    "dev": "tsx src/cli.ts",
+    "index": "tsx src/cli.ts index",
+    "serve": "tsx src/cli.ts serve",
+    "start": "node dist/cli.js",
+    "fetch-grammars": "node scripts/fetch-grammars.mjs",
+    "postinstall": "node scripts/copy-grammars.mjs || node scripts/fetch-grammars.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "keywords": [
+    "ast",
+    "tree-sitter",
+    "mcp",
+    "symbols",
+    "call-graph"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "commander": "^13.1.0",
+    "ignore": "^7.0.3",
+    "web-tree-sitter": "^0.25.3",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "tree-sitter-cli": "^0.25.3",
+    "tree-sitter-javascript": "^0.23.1",
+    "tree-sitter-python": "^0.23.6",
+    "tree-sitter-typescript": "^0.23.2",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  }
+}
