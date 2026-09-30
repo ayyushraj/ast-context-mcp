@@ -3,11 +3,14 @@ export type LanguageId = "typescript" | "tsx" | "javascript" | "python";
 const EXT_MAP: Record<string, LanguageId> = {
   ".ts": "typescript",
   ".tsx": "tsx",
+  ".mts": "typescript",
+  ".cts": "typescript",
   ".js": "javascript",
   ".jsx": "javascript",
   ".mjs": "javascript",
   ".cjs": "javascript",
   ".py": "python",
+  ".pyi": "python",
 };
 
 export function languageFromPath(filePath: string): LanguageId | null {
