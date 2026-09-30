@@ -4,6 +4,9 @@ import ignore, { type Ignore } from "ignore";
 import { DEFAULT_IGNORE, INDEXABLE_EXTENSIONS } from "../config.js";
 import { languageFromPath } from "./languages.js";
 
+/** Skip generated or vendored blobs that are not useful as source context. */
+const MAX_SOURCE_BYTES = 1_048_576;
+
 export interface WalkedFile {
   absolutePath: string;
   relativePath: string;
@@ -55,16 +58,17 @@ export function walkWorkspace(root: string): WalkedFile[] {
       }
       if (!ent.isFile()) continue;
       if (!isIndexable(relPosix)) continue;
-
-      const lang = languageFromPath(relPosix);
-      if (!lang) continue;
-
       let st;
       try {
         st = statSync(abs);
       } catch {
         continue;
       }
+      if (st.size > MAX_SOURCE_BYTES) continue;
+
+      const lang = languageFromPath(relPosix);
+      if (!lang) continue;
+
       out.push({
         absolutePath: abs,
         relativePath: relPosix,
