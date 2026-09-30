@@ -23,7 +23,8 @@ function run(args) {
 }
 
 run(["index", fixtures, "--full"]);
-const status = JSON.parse(run(["status", fixtures]));
+// status without --json appends a human token-savings block after the JSON object
+const status = JSON.parse(run(["status", fixtures, "--json"]));
 if (status.files < 2 || status.symbols < 10) {
   console.error("Unexpected status", status);
   process.exit(1);
