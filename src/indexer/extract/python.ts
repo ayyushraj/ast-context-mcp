@@ -183,13 +183,16 @@ export function extractPython(tree: Tree, source: string): ExtractResult {
         const nameNode = childByField(node, "name");
         if (nameNode) {
           const name = textSlice(source, nameNode);
+          const bases = childByField(node, "superclasses");
           symbols.push({
             name,
             kind: "class",
             container: className,
             range: nodeRange(node),
             signature: `class ${name}`,
-            typeText: name,
+            typeText: bases
+              ? textSlice(source, bases).replace(/^\(|\)$/g, "")
+              : name,
           });
           const body = childByField(node, "body");
           if (body) {
