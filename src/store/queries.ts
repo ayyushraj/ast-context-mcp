@@ -62,8 +62,10 @@ export function findSymbols(
     clauses.push("s.name = ?");
     params.push(opts.name);
   } else if (opts.prefix) {
-    clauses.push("s.name LIKE ?");
-    params.push(`${opts.prefix}%`);
+    // Treat % and _ as literals so a prefix search cannot widen into a wildcard.
+    const literal = opts.prefix.replace(/[\\%_]/g, (ch) => `\\${ch}`);
+    clauses.push("s.name LIKE ? ESCAPE '\\'");
+    params.push(`${literal}%`);
   }
   if (opts.kind) {
     clauses.push("s.kind = ?");
