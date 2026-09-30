@@ -11,6 +11,7 @@ export interface IndexStats {
   indexed: number;
   skipped: number;
   deleted: number;
+  failed: number;
   symbols: number;
   calls: number;
   imports: number;
@@ -32,6 +33,7 @@ export async function runIndex(
 
   let indexed = 0;
   let skipped = 0;
+  let failed = 0;
   let symbols = 0;
   let calls = 0;
   let imports = 0;
@@ -125,6 +127,7 @@ export async function runIndex(
 
       indexed++;
     } catch (err) {
+      failed++;
       console.error(
         `Failed to index ${file.relativePath}:`,
         err instanceof Error ? err.message : err
@@ -153,6 +156,7 @@ export async function runIndex(
     indexed,
     skipped,
     deleted,
+    failed,
     symbols,
     calls,
     imports,
