@@ -248,13 +248,14 @@ export function extractTypeScript(
         const nameNode = childByField(node, "name");
         if (nameNode) {
           const name = textSlice(source, nameNode);
+          const ret = childByField(node, "return_type");
           symbols.push({
             name,
             kind: "method",
             container: className,
             range: nodeRange(node),
             signature: textSlice(source, node).split("\n")[0]?.slice(0, 200) ?? null,
-            typeText: null,
+            typeText: ret ? textSlice(source, ret).replace(/^:\s*/, "") : null,
           });
         }
         break;
