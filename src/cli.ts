@@ -12,7 +12,16 @@ import {
   indexStatus,
 } from "./store/queries.js";
 import { computeTokenSavings, printTokenSavings } from "./metrics/report.js";
-import { existsSync } from "node:fs";
+import { existsSync, statSync } from "node:fs";
+
+function requireWorkspaceRoot(rootArg?: string) {
+  const config = resolveConfig(rootArg);
+  if (!existsSync(config.root) || !statSync(config.root).isDirectory()) {
+    console.error(`Workspace root does not exist: ${config.root}`);
+    process.exit(1);
+  }
+  return config;
+}
 
 const program = new Command();
 
@@ -29,7 +38,7 @@ program
   .argument("[root]", "Workspace root", process.cwd())
   .option("-f, --full", "Force full re-index (ignore content hashes)", false)
   .action(async (root: string, opts: { full?: boolean }) => {
-    const config = resolveConfig(root);
+    const config = requireWorkspaceRoot(root);
     console.log(`Indexing ${config.root} → ${config.dbPath}`);
     const stats = await runIndex(config.root, config.dbPath, {
       full: opts.full,
@@ -43,7 +52,7 @@ program
   .option("-r, --root <path>", "Workspace root", process.cwd())
   .option("--reindex", "Re-index before serving", false)
   .action(async (opts: { root: string; reindex?: boolean }) => {
-    const config = resolveConfig(opts.root);
+    const config = requireWorkspaceRoot(opts.root);
     if (opts.reindex || !existsSync(config.dbPath)) {
       process.stderr.write(`Indexing ${config.root}…\n`);
       await runIndex(config.root, config.dbPath);
