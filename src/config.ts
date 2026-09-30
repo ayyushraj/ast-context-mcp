@@ -31,11 +31,14 @@ export const DEFAULT_IGNORE = [
 export const INDEXABLE_EXTENSIONS = new Set([
   ".ts",
   ".tsx",
+  ".mts",
+  ".cts",
   ".js",
   ".jsx",
   ".mjs",
   ".cjs",
   ".py",
+  ".pyi",
 ]);
 
 export interface Config {
