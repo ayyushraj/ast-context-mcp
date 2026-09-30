@@ -31,9 +31,16 @@ export async function gitBlame(
 ): Promise<BlameResult> {
   const abs = resolve(root, relativePath);
   const args = ["blame", "--line-porcelain"];
-  if (opts.startLine != null) {
-    const end = opts.endLine ?? opts.startLine;
-    args.push(`-L`, `${opts.startLine},${end}`);
+  let startLine = opts.startLine;
+  let endLine = opts.endLine;
+  if (startLine != null && endLine != null && endLine < startLine) {
+    const swap = startLine;
+    startLine = endLine;
+    endLine = swap;
+  }
+  if (startLine != null) {
+    const end = endLine ?? startLine;
+    args.push(`-L`, `${startLine},${end}`);
   }
   args.push("--", abs);
 
@@ -53,8 +60,8 @@ export async function gitBlame(
   const lines = parsePorcelain(stdout);
   return {
     path: relativePath,
-    startLine: opts.startLine ?? (lines[0]?.line ?? 1),
-    endLine: opts.endLine ?? (lines[lines.length - 1]?.line ?? 1),
+    startLine: startLine ?? (lines[0]?.line ?? 1),
+    endLine: endLine ?? (lines[lines.length - 1]?.line ?? 1),
     lines,
   };
 }
