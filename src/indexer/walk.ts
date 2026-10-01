@@ -1,3 +1,4 @@
+/** Discovers source files, honoring .gitignore plus DEFAULT_IGNORE. */
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative, sep } from "node:path";
 import ignore, { type Ignore } from "ignore";

@@ -1,3 +1,7 @@
+/**
+ * MCP over stdio. stdout is the protocol stream, so progress logs go to stderr.
+ * Cursor starts this process; a manual run looks idle because nothing is connected.
+ */
 import { existsSync } from "node:fs";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";

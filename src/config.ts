@@ -1,3 +1,4 @@
+/** Workspace paths and which extensions the walker is allowed to open. */
 import { join, resolve } from "node:path";
 
 export const INDEX_DIR = ".ast-context";

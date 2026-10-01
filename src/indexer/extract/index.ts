@@ -1,3 +1,7 @@
+/**
+ * JS, JSX, TS, and TSX share the TypeScript extractor: those grammars use
+ * the same node names for functions, classes, and calls. Python does not.
+ */
 import type { Tree } from "web-tree-sitter";
 import type { LanguageId } from "../languages.js";
 import { extractPython } from "./python.js";

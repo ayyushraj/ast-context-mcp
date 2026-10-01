@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/** CLI: index and query write to the terminal; serve speaks MCP on stdio. */
 import { Command } from "commander";
 import { resolveConfig } from "./config.js";
 import { runIndex } from "./indexer/pipeline.js";

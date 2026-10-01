@@ -1,3 +1,7 @@
+/**
+ * Local SQLite index. files own symbols, calls, and imports (ON DELETE CASCADE).
+ * calls.callee_symbol_id stays null until name resolution runs after the walk.
+ */
 import { DatabaseSync } from "node:sqlite";
 import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";

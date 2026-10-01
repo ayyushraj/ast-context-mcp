@@ -1,3 +1,4 @@
+/** SHA-256 of file bytes. Used as the incremental-index key, not a security hash. */
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 

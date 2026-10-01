@@ -1,3 +1,4 @@
+/** Extension to grammar id. .mts/.cts are TypeScript; .pyi stubs are Python. */
 export type LanguageId = "typescript" | "tsx" | "javascript" | "python";
 
 const EXT_MAP: Record<string, LanguageId> = {

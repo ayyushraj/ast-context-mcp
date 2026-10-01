@@ -1,3 +1,8 @@
+/**
+ * Full and incremental indexing.
+ * Unchanged files are skipped by SHA-256 of their contents, so an extractor
+ * change is invisible until the next --full run.
+ */
 import { readFileSync } from "node:fs";
 import { IndexStore } from "../store/db.js";
 import { hashBuffer } from "./hash.js";
@@ -43,6 +48,7 @@ export async function runIndex(
     const source = readFileSync(file.absolutePath);
     const hash = hashBuffer(source);
 
+    // Content hash, not mtime: a touch without an edit must not rewrite the row.
     if (!opts.full) {
       const existing = store.getFileByPath(file.relativePath);
       if (existing && existing.hash === hash) {

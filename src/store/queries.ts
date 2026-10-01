@@ -85,6 +85,7 @@ export function findSymbols(
   return rows<SymbolHit>(db.prepare(sql).all(...params));
 }
 
+/** Prefer a type/class/function over a same-named variable or parameter. */
 export function getDefinition(
   db: DatabaseSync,
   name: string,

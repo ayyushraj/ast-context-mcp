@@ -1,3 +1,4 @@
+/** Walks a Python tree. import_from_statement is "from x import y", not import_statement. */
 import type { Node, Tree } from "web-tree-sitter";
 import {
   nodeRange,

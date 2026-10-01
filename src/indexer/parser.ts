@@ -1,3 +1,8 @@
+/**
+ * Loads web-tree-sitter once, then caches each language grammar.
+ * WASM files live in grammars/ (copied on npm install), two levels up from
+ * both src/indexer and dist/indexer.
+ */
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";

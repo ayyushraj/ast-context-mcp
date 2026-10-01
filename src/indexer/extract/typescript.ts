@@ -1,3 +1,4 @@
+/** Walks a JS/TS tree for symbols, calls, and imports. Names only, not tsc types. */
 import type { Node, Tree } from "web-tree-sitter";
 import {
   nodeRange,
